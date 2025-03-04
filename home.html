@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input {
+            margin: 10px 0;
+            padding: 8px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #207ed1;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #result {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button onclick="window.location.href='frequentielle.html'">Analyse fréquentielle</button>
+        <button onclick="window.location.href='cesare.html'">Chiffrement de César</button>
+        <button onclick="window.location.href='affine.html'">Chiffrement de Affine</button>
+        <button onclick="window.location.href='vigenere.html'">Chiffrement de Vigenère</button>
+        <button onclick="window.location.href='hill.html'">Chiffrement de Hill</button>
+        <button onclick="window.location.href='cryptanalyse_anneaux.html'">Cryptanalyse utilisant les anneaux et éléments inversibles</button>
+        <p>substitution</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chiffrement de Vigenère</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input {
+            margin: 10px 0;
+            padding: 8px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 100%;
+            margin: 20px 0 0px 0px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #result {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chiffrement de Vigenère</h1>
+
+        <h2>Entrez le texte clair :</h2>
+        <input type="text" id="info1" placeholder="Votre message ici...">
+
+        <h2>Entrez la clé :</h2>
+        <input type="text" id="info2" placeholder="Exemple : ABC">
+
+        <button onclick="afficherInfos()">Chiffrer</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function valeurNum(c) {
+            return c.charCodeAt(0) - 65;
+        }
+
+        function valeurAlpha(n) {
+            return String.fromCharCode(n + 65);
+        }
+
+        function vignere(msg, cle) {
+            let result = "";
+            msg = msg.toUpperCase().replace(/[^A-Z]/g, ""); 
+            cle = cle.toUpperCase().replace(/[^A-Z]/g, ""); 
+
+            if (cle.length === 0) {
+                return "Erreur : la clé doit contenir au moins une lettre.";
+            }
+
+            for (let i = 0, j = 0; i < msg.length; i++) {
+                let n = valeurNum(msg[i]);
+                let k = valeurNum(cle[j % cle.length]);
+                let newCharCode = (n + k) % 26;
+                result += valeurAlpha(newCharCode);
+                j++; 
+            }
+            return result;
+        }
+
+        function afficherInfos() {
+            let info1 = document.getElementById("info1").value;
+            let info2 = document.getElementById("info2").value;
+            
+            if (info1 && info2) {
+                let texteChiffre = vignere(info1, info2);
+                document.getElementById("result").innerText = "Texte chiffré : " + texteChiffre;
+            } else {
+                document.getElementById("result").innerText = "Veuillez remplir les deux champs.";
+            }
+        }
+    </script>
+</body>
+</html>

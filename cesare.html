@@ -63,18 +63,34 @@
 
     <script>
 
+         function estMinuscule(c) {
+    return c >= 'a' && c <= 'z';
+}
+        function valeurNum(c){
+    return c.charCodeAt(0) - 65;
+}
+        function valeurAlpha(c){
+    return String.fromCharCode(c + 65);
+}
         function cesare(msg, decalage) {
             let result = "";
-            msg = msg.toUpperCase(); 
+            msg = msg.toUpperCase();
             decalage = parseInt(decalage);
+
+            if (isNaN(decalage)) {
+                return "Décalage invalide !";
+            }
 
             for (let i = 0; i < msg.length; i++) {
                 let char = msg[i];
-                if (char >= 'A' && char <= 'Z') { 
-                    let codeChiffre = ( valeurNum(char) + decalage) % 26; 
-                    result += valeurAlpha(codeChiffre); 
+                if (char >= 'A' && char <= 'Z') {
+                    let codeChiffre = (valeurNum(char) + decalage) % 26;
+                    if (codeChiffre < 0) {
+                        codeChiffre += 26; 
+                    }
+                    result += valeurAlpha(codeChiffre);
                 } else {
-                    result += char; 
+                    result += char;
                 }
             }
             return result;

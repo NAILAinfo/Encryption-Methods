@@ -5,57 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulaire</title>
     <style>
+              * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             background-color: #f4f4f4;
+            padding: 20px;
+            gap: 20px;
         }
         .container {
             background: white;
-            padding: 50px;
+            padding: 30px;
             border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            width: 300px; /* Assure une même largeur pour toutes les divs */
+            height: 500px; /* Hauteur uniforme */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px; /* Hauteur uniforme */
         }
-        input {
-            margin: 10px 0;
-            padding: 8px;
-            width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+        h2 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: #333;
         }
         button {
             background-color: #207ed1;
             color: white;
             border: none;
-            padding: 10px;
+            padding: 12px;
             cursor: pointer;
             border-radius: 4px;
             width: 100%;
-            margin: 10px 0;
+            margin: 5px 0;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #218838;
+            background-color: #0056b3;
         }
         #result {
             margin-top: 15px;
             font-weight: bold;
             color: #333;
         }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <button onclick="window.location.href='frequentielle.html'">Analyse fréquentielle</button>
+        <h2>Chiffrements classiques</h2>
+        <button onclick="window.location.href='atbash.html'">Atbash</button>
+        <button onclick="window.location.href='scytale.html'">Scytale</button>
+        <button onclick="window.location.href='jefferson.html'">Cylindre de Jefferson</button>
+        <button onclick="window.location.href='vernam.html'">Chiffrement de Vernam</button>
+        <button onclick="window.location.href='enigma.html'">Chiffrement de Enigma</button>
         <button onclick="window.location.href='cesare.html'">Chiffrement de César</button>
+        <button onclick="window.location.href='substitution.html'">Substitution aléatoire</button>
+      </div>
+      <div class="container">  
+        <h2>Chiffrements par substitution et transposition</h2>
         <button onclick="window.location.href='affine.html'">Chiffrement de Affine</button>
-        <button onclick="window.location.href='vigenere.html'">Chiffrement de Vigenère</button>
         <button onclick="window.location.href='hill.html'">Chiffrement de Hill</button>
-        <button onclick="window.location.href='cryptanalyse_anneaux.html'">Cryptanalyse utilisant les anneaux et éléments inversibles</button>
-        <p>substitution</p>
+        <button onclick="window.location.href='playfair.html'">Chiffrement de Playfair</button>
+        <button onclick="window.location.href='vigenere.html'">Chiffrement de Vigenère</button>
+      </div> 
+      <div class="container">  
+        <h2>Analyses et tests cryptographiques</h2>
+        <button onclick="window.location.href='frequentielle.html'">Analyse fréquentielle</button>
+        <button onclick="window.location.href='kasiski.html'">Test de Kasiski</button>
+        <button onclick="window.location.href='mot_probable.html'">Méthode de mot probable</button>
+        <button onclick="window.location.href='otp.html'">One Time Pad</button>
+        <button onclick="window.location.href='coincidence.html'">Indice de coïncidence</button>
     </div>
+    
 </body>
 </html>

@@ -4,23 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chiffrement One-Time Pad</title>
-    <link rel="stylesheet" href="style.css"> 
-
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h2>Chiffrement de Masque jetable (One-Time Pad)</h2>
+        <h2>Chiffrement de Masque Jetable (One-Time Pad)</h2>
         <h3>Entrez le texte clair :</h3>
-
         <input type="text" id="info1" placeholder="Votre message ici...">
-
-        <button onclick="afficherInfos()">Chiffrer</button>
+        <button id="chiffrerBtn">Chiffrer</button>
         <p id="key"></p>
         <p id="result"></p>
     </div>
 
     <script type="module">
-       import { vignere } from "./script.js";
+        import { valeurNum, valeurAlpha } from './script.js';
 
         function genererCleAleatoire(longueur) {
             const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -32,19 +29,30 @@
         }
 
         function oneTimePad(msg) {
+            if (!msg.trim()) return { messageChiffre: "Veuillez entrer un message valide.", cle: "" };
+            
             let cle = genererCleAleatoire(msg.length);
-            let messageChiffre = vignere(msg, cle);
-            return { messageChiffre, cle };        }
+            let messageChiffre = "";
+
+            for (let i = 0; i < msg.length; i++) {
+                let charCodeTexte = valeurNum(msg[i]); // Correction ici
+                let charCodeCle = valeurNum(cle[i]);  // Correction ici
+                let xorCode = charCodeTexte ^ charCodeCle; // XOR
+                messageChiffre += valeurAlpha(xorCode);
+            }
+
+            return { messageChiffre, cle };
+        }
 
         function afficherInfos() {
-            let message = document.getElementById("info1").value;
+            let message = document.getElementById("info1").value.trim();
             let resultat = oneTimePad(message);
             
-            document.getElementById("key").textContent = "Clé utilisée : " + resultat.cle;
-            document.getElementById("result").textContent = "Message chiffré : " + resultat.messageChiffre;
+            document.getElementById("key").textContent = resultat.cle ? "Clé utilisée : " + resultat.cle : "";
+            document.getElementById("result").textContent = resultat.messageChiffre;
         }
-        window.afficherInfos = afficherInfos;
 
+        document.getElementById("chiffrerBtn").addEventListener("click", afficherInfos);
     </script>
 </body>
 </html>

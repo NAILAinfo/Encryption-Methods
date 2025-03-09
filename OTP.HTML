@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chiffrement One-Time Pad</title>
+    <link rel="stylesheet" href="style.css"> 
+
+</head>
+<body>
+    <div class="container">
+        <h2>Chiffrement de Masque jetable (One-Time Pad)</h2>
+        <h3>Entrez le texte clair :</h3>
+
+        <input type="text" id="info1" placeholder="Votre message ici...">
+
+        <button onclick="afficherInfos()">Chiffrer</button>
+        <p id="key"></p>
+        <p id="result"></p>
+    </div>
+
+    <script type="module">
+       import { vignere } from "./script.js";
+
+        function genererCleAleatoire(longueur) {
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let cle = "";
+            for (let i = 0; i < longueur; i++) {
+                cle += alphabet[Math.floor(Math.random() * alphabet.length)];
+            }
+            return cle;
+        }
+
+        function oneTimePad(msg) {
+            let cle = genererCleAleatoire(msg.length);
+            let messageChiffre = vignere(msg, cle);
+            return { messageChiffre, cle };        }
+
+        function afficherInfos() {
+            let message = document.getElementById("info1").value;
+            let resultat = oneTimePad(message);
+            
+            document.getElementById("key").textContent = "Clé utilisée : " + resultat.cle;
+            document.getElementById("result").textContent = "Message chiffré : " + resultat.messageChiffre;
+        }
+        window.afficherInfos = afficherInfos;
+
+    </script>
+</body>
+</html>

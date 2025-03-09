@@ -4,48 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chiffrement de Vigenère</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
-        .container {
-            background: white;
-            padding: 50px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        input {
-            margin: 10px 0;
-            padding: 8px;
-            width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 4px;
-            width: 100%;
-            margin: 20px 0 0px 0px;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        #result {
-            margin-top: 15px;
-            font-weight: bold;
-            color: #333;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
     <div class="container">
@@ -61,14 +20,9 @@
         <p id="result"></p>
     </div>
 
-    <script>
-        function valeurNum(c) {
-            return c.charCodeAt(0) - 65;
-        }
+    <script type="module">
 
-        function valeurAlpha(n) {
-            return String.fromCharCode(n + 65);
-        }
+        import { valeurNum, valeurAlpha} from './script.js';
 
         function vignere(msg, cle) {
             let result = "";
@@ -100,6 +54,7 @@
                 document.getElementById("result").innerText = "Veuillez remplir les deux champs.";
             }
         }
-    </script>
-</body>
+
+        window.afficherInfos = afficherInfos; // Rendre la fonction globale
+</script></body>
 </html>

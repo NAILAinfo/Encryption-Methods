@@ -9,15 +9,15 @@
 </head>
 <body>
     <div class="container">
-        <h1>Chiffrement de César</h1>
+        <h1>Déchiffrement de César</h1>
 
-        <h2>Entrez le texte clair :</h2>
+        <h3>Entrez le texte chiffrée :</h3>
         <input type="text" id="info1" placeholder="Votre message ici...">
 
-        <h2>Entrez le numéro de décalage :</h2>
+        <h3>Entrez le numéro de décalage :</h3>
         <input type="number" id="info2" placeholder="exemple : 3">
         
-        <button onclick="afficherInfos()">Chiffrer</button>
+        <button onclick="afficherInfos()">Déchiffrer</button>
         <p id="result"></p>
     </div>
 
@@ -27,13 +27,13 @@
 
         function afficherInfos() {
             let info1 = document.getElementById("info1").value;
-            let info2 = parseInt(document.getElementById("info2").value);
+            let info2 = -1*parseInt(document.getElementById("info2").value);
             if (isNaN(info2)) {
                 return "Décalage invalide !";
             }
             if (info1 && info2) {
                 let texteChiffre = cesare(info1, info2);
-                document.getElementById("result").innerText = "Texte chiffré : " + texteChiffre;
+                document.getElementById("result").innerText = "Texte clair : " + texteChiffre;
             } else {
                 document.getElementById("result").innerText = "Veuillez remplir les deux champs.";
             }

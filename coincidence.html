@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indice de Coïncidence</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Indice de Coïncidence</h2>
+        <h3>Entrez le texte :</h3>
+        <input type="text" id="info1" placeholder="Votre message ici...">
+        <button onclick="afficherInfos()">Calculer</button>
+        <p id="message"></p>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function coincidence(texte) {
+           return texte;
+        }
+
+        function afficherInfos() {
+            let message = document.getElementById("info1").value.trim();
+
+            if (message === "") {
+                document.getElementById("message").textContent = "Veuillez entrer un texte.";
+                document.getElementById("result").textContent = "";
+                return;
+            }
+
+            let ic = coincidence(message);
+            document.getElementById("result").textContent = `Indice de coïncidence : ${ic}`; 
+
+        }
+    </script>
+</body>
+</html>

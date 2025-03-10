@@ -35,9 +35,9 @@
             let messageChiffre = "";
 
             for (let i = 0; i < msg.length; i++) {
-                let charCodeTexte = valeurNum(msg[i]); // Correction ici
-                let charCodeCle = valeurNum(cle[i]);  // Correction ici
-                let xorCode = charCodeTexte ^ charCodeCle; // XOR
+                let charCodeTexte = valeurNum(msg[i]) ; 
+                let charCodeCle = valeurNum(cle[i]) ;  
+                let xorCode = charCodeTexte ^ charCodeCle; 
                 messageChiffre += valeurAlpha(xorCode);
             }
 

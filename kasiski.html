@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Kasiski</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        textarea {
+            width: 80%;
+            height: 100px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Test de Kasiski</h2>
+    <textarea id="cipherText" placeholder="Entrez le texte chiffré ici..."></textarea>
+    <br>
+    <button onclick="runKasiskiTest()">Analyser</button>
+
+    <h3>Résultats :</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>MOT</th>
+                <th>POS1</th>
+                <th>POS2</th>
+                <th>DIST</th>
+                <th>FACT</th>
+            </tr>
+        </thead>
+        <tbody id="resultsTable"></tbody>
+    </table>
+
+    <script>
+        function runKasiskiTest() {
+            let ciphertext = document.getElementById("cipherText").value.replace(/[^A-Z]/gi, "").toUpperCase();
+            const minLength = 3; // Longueur minimale des séquences à chercher
+            let repeatedSequences = {}; 
+            let resultsTable = document.getElementById("resultsTable");
+            resultsTable.innerHTML = "";
+
+            // Recherche des séquences répétées
+            for (let i = 0; i < ciphertext.length - minLength; i++) {
+                for (let length = minLength; length <= 5; length++) { 
+                    let sequence = ciphertext.substring(i, i + length);
+                    if (sequence.length < length) break;
+
+                    if (!repeatedSequences[sequence]) {
+                        repeatedSequences[sequence] = [];
+                    }
+                    repeatedSequences[sequence].push(i);
+                }
+            }
+
+            let distances = [];
+
+            // Remplissage du tableau avec les séquences répétées
+            for (let seq in repeatedSequences) {
+                let positions = repeatedSequences[seq];
+                if (positions.length > 1) {
+                    for (let j = 1; j < positions.length; j++) {
+                        let distance = positions[j] - positions[j - 1];
+                        distances.push(distance);
+                        
+                        let row = `<tr>
+                            <td>${seq}</td>
+                            <td>${positions[j - 1]}</td>
+                            <td>${positions[j]}</td>
+                            <td>${distance}</td>
+                            <td>${getFactors(distance).join(", ")}</td>
+                        </tr>`;
+                        resultsTable.innerHTML += row;
+                    }
+                }
+            }
+        }
+
+        // Fonction pour calculer les diviseurs d'un nombre
+        function getPrimeFactors(n) {
+    let factors = [];
+    let divisor = 2;
+
+    while (n > 1) {
+        while (n % divisor === 0) {
+            factors.push(divisor);
+            n /= divisor;
+        }
+        divisor++;
+    }
+
+    return factors.join('.');
+}
+    </script>
+
+</body>
+</html>

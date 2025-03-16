@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chiffrement One-Time Pad</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Chiffrement de Atbash </h2>
+        <h3>Entrez le texte clair :</h3>
+        <input type="text" id="info1" placeholder="Votre message ici...">
+        <button id="chiffrerBtn">Chiffrer</button>
+        <p id="result"></p>
+    </div>
+
+    <script >
+       function atbash(msg){
+           const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+           const reversedAlphabet = alphabet.split("").reverse().join("");
+
+          return msg.toUpperCase().split("").map(char => {
+              let index = alphabet.indexOf(char);
+              return index !== -1 ? reversedAlphabet[index] : char;
+               }).join("");
+       }
+        function afficherInfos() {
+            let message = document.getElementById("info1").value.trim();
+            let resultat = atbash(message);
+            
+            document.getElementById("result").textContent = resultat;
+        }
+
+        document.getElementById("chiffrerBtn").addEventListener("click", afficherInfos);
+    </script>
+</body>
+</html>

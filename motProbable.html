@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Méthode du Mot Probable - Simplifié</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .freq-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .freq-table th, .freq-table td {
+            border: 1px solid #ddd;
+            padding: 4px;
+            text-align: center;
+        }
+        .sub-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .sub-table td {
+            width: 25px;
+            height: 25px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        .sub-input {
+            width: 20px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .result {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Méthode du Mot Probable</h1>
+        
+        <h2>Texte chiffré</h2>
+        <textarea id="ciphertext" placeholder="Entrez le texte chiffré ici..."></textarea>
+        
+        <h2>Mot probable</h2>
+        <input type="text" id="probableWord" placeholder="Entrez un mot probable (ex: BONJOUR, LE)">
+        <button class="btn" onclick="searchPattern()">Rechercher motifs</button>
+        
+        <h2>Analyse de fréquence</h2>
+        <button class="btn" onclick="analyzeFrequency()">Analyser</button>
+        <div id="freqResult"></div>
+        
+        <h2>Table de substitution</h2>
+        <div id="subTable"></div>
+        <button class="btn" onclick="applySubstitution()">Appliquer</button>
+        <button class="btn" onclick="resetSubstitution()" style="background-color: #f44336;">Reset</button>
+        
+        <div id="result" class="result"></div>
+    </div>
+    
+    <script>
+        const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let substitutionMap = {};
+        
+        // Initialisation
+        window.onload = function() {
+            createSubstitutionTable();
+        };
+        
+        // Normalisation du texte
+        function normalizeText(text) {
+            return text.toUpperCase().normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^A-Z]/g, '');
+        }
+        
+        // Normaliser avec espaces
+        function normalizeWithSpaces(text) {
+            return text.toUpperCase().normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^A-Z\s]/g, '');
+        }
+        
+        // Analyser les fréquences
+        function analyzeFrequency() {
+            const text = normalizeText(document.getElementById("ciphertext").value);
+            if (!text) return;
+            
+            // Compter les occurrences
+            const freqs = {};
+            for (let char of text) {
+                freqs[char] = (freqs[char] || 0) + 1;
+            }
+            
+            // Convertir en tableau et trier
+            const freqArray = Object.entries(freqs)
+                .map(([letter, count]) => ({ 
+                    letter, 
+                    count, 
+                    percent: (count / text.length * 100).toFixed(1) 
+                }))
+                .sort((a, b) => b.count - a.count);
+            
+            // Afficher résultats
+            let tableHTML = "<table class='freq-table'><tr><th>Lettre</th><th>Nb</th><th>%</th></tr>";
+            freqArray.forEach(item => {
+                tableHTML += `<tr><td>${item.letter}</td><td>${item.count}</td><td>${item.percent}%</td></tr>`;
+            });
+            tableHTML += "</table>";
+            
+            document.getElementById("freqResult").innerHTML = tableHTML +
+                "<p><strong>Rappel:</strong> En français, les lettres les plus fréquentes sont: E, A, S, I, N, T, R.</p>";
+        }
+        
+        // Créer la table de substitution
+        function createSubstitutionTable() {
+            let html = "<table class='sub-table'><tr><td>Chiffré</td>";
+            for (let i = 0; i < ALPHABET.length; i++) {
+                html += `<td>${ALPHABET[i]}</td>`;
+            }
+            html += "</tr><tr><td>Clair</td>";
+            
+            for (let i = 0; i < ALPHABET.length; i++) {
+                html += `<td><input type="text" maxlength="1" class="sub-input" id="sub_${ALPHABET[i]}" oninput="updateSub('${ALPHABET[i]}', this.value)"></td>`;
+            }
+            html += "</tr></table>";
+            
+            document.getElementById("subTable").innerHTML = html;
+        }
+        
+        // Mettre à jour la substitution
+        function updateSub(cipher, plain) {
+            plain = plain.toUpperCase();
+            
+            // Supprimer les autres occurrences de cette lettre
+            if (plain && ALPHABET.includes(plain)) {
+                for (let key in substitutionMap) {
+                    if (substitutionMap[key] === plain && key !== cipher) {
+                        document.getElementById(`sub_${key}`).value = "";
+                        delete substitutionMap[key];
+                    }
+                }
+                substitutionMap[cipher] = plain;
+            } else {
+                delete substitutionMap[cipher];
+            }
+        }
+        
+        // Appliquer la substitution
+        function applySubstitution() {
+            const text = normalizeWithSpaces(document.getElementById("ciphertext").value);
+            if (!text) return;
+            
+            let result = "";
+            for (let char of text) {
+                if (char === " ") {
+                    result += " ";
+                } else if (substitutionMap[char]) {
+                    result += substitutionMap[char];
+                } else {
+                    result += "_";
+                }
+            }
+            
+            document.getElementById("result").innerHTML = `<h3>Résultat:</h3><p>${result}</p>`;
+        }
+        
+        // Rechercher des motifs correspondant au mot probable
+        function searchPattern() {
+            const ciphertext = normalizeText(document.getElementById("ciphertext").value);
+            const word = normalizeText(document.getElementById("probableWord").value);
+            
+            if (!ciphertext || !word) return;
+            
+            // Recherche de motifs de même longueur
+            let possiblePatterns = [];
+            for (let i = 0; i <= ciphertext.length - word.length; i++) {
+                const pattern = ciphertext.substring(i, i + word.length);
+                
+                // Vérifier si le motif a la même structure que le mot
+                if (hasMatchingPattern(pattern, word)) {
+                    possiblePatterns.push({
+                        pattern: pattern,
+                        position: i
+                    });
+                }
+            }
+            
+            // Afficher les résultats
+            if (possiblePatterns.length > 0) {
+                let html = `<h3>Motifs possibles pour "${word}":</h3><ul>`;
+                
+                possiblePatterns.forEach(match => {
+                    html += `<li>Position ${match.position}: <strong>${match.pattern}</strong> `;
+                    html += `<button class="btn" onclick="applyPattern('${match.pattern}', '${word}')">Appliquer</button></li>`;
+                });
+                
+                html += "</ul>";
+                document.getElementById("result").innerHTML = html;
+            } else {
+                document.getElementById("result").innerHTML = `<p>Aucun motif correspondant à "${word}" trouvé.</p>`;
+            }
+        }
+        
+        // Vérifier si un motif correspond à la structure d'un mot
+        function hasMatchingPattern(pattern, word) {
+            // Vérifier que le motif a des répétitions aux mêmes endroits que le mot
+            const patternMap = {};
+            const wordMap = {};
+            
+            for (let i = 0; i < word.length; i++) {
+                const patternChar = pattern[i];
+                const wordChar = word[i];
+                
+                if (patternMap[patternChar] && patternMap[patternChar] !== wordChar) {
+                    return false;
+                }
+                
+                if (wordMap[wordChar] && wordMap[wordChar] !== patternChar) {
+                    return false;
+                }
+                
+                patternMap[patternChar] = wordChar;
+                wordMap[wordChar] = patternChar;
+            }
+            
+            return true;
+        }
+        
+        // Appliquer un pattern trouvé
+        function applyPattern(pattern, word) {
+            // Réinitialiser la table
+            resetSubstitution();
+            
+            // Appliquer les substitutions
+            for (let i = 0; i < pattern.length; i++) {
+                const cipherChar = pattern[i];
+                const plainChar = word[i];
+                
+                substitutionMap[cipherChar] = plainChar;
+                document.getElementById(`sub_${cipherChar}`).value = plainChar;
+            }
+            
+            // Appliquer au texte
+            applySubstitution();
+        }
+        
+        // Réinitialiser la table de substitution
+        function resetSubstitution() {
+            substitutionMap = {};
+            
+            for (let i = 0; i < ALPHABET.length; i++) {
+                document.getElementById(`sub_${ALPHABET[i]}`).value = "";
+            }
+            
+            document.getElementById("result").innerHTML = "";
+        }
+    </script>
+</body>
+</html>

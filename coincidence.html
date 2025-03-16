@@ -14,11 +14,41 @@
         <button onclick="afficherInfos()">Calculer</button>
         <p id="message"></p>
         <p id="result"></p>
+        <p id="langue"></p>
     </div>
 
     <script>
         function coincidence(texte) {
-           return texte;
+            texte = texte.toUpperCase().replace(/[^A-Z]/g, ""); // Garder uniquement les lettres A-Z
+            let freq = {};
+            let N = texte.length;
+
+            for (let char of texte) {
+                freq[char] = (freq[char] || 0) + 1;
+            }
+
+            if (N <= 1) return 0; // Pour éviter une division par zéro
+
+            let IC = Object.values(freq).reduce((sum, f) => sum + f * (f - 1), 0) / (N * (N - 1));
+            return IC;
+        }
+
+        const languesIC = [
+            { langue: "Arabe", indice: 0.0758 },
+            { langue: "Anglais", indice: 0.0667 },
+            { langue: "Italien", indice: 0.0738 },
+            { langue: "Portugais", indice: 0.0745 },
+            { langue: "Russe", indice: 0.0529 },
+            { langue: "Allemand", indice: 0.0762 },
+            { langue: "Espagnol", indice: 0.0770 },
+            { langue: "Français", indice: 0.0778 }
+        ];
+
+        function determinerLangue(ic) {
+            let langueProche = languesIC.reduce((prev, curr) => 
+                Math.abs(curr.indice - ic) < Math.abs(prev.indice - ic) ? curr : prev
+            );
+            return langueProche.langue;
         }
 
         function afficherInfos() {
@@ -27,12 +57,16 @@
             if (message === "") {
                 document.getElementById("message").textContent = "Veuillez entrer un texte.";
                 document.getElementById("result").textContent = "";
+                document.getElementById("langue").textContent = "";
                 return;
             }
 
             let ic = coincidence(message);
-            document.getElementById("result").textContent = `Indice de coïncidence : ${ic}`; 
+            let langue = determinerLangue(ic);
 
+            document.getElementById("message").textContent = "";
+            document.getElementById("result").textContent = `Indice de coïncidence : ${ic.toFixed(4)}`;
+            document.getElementById("langue").textContent = `Il est probable que le texte soit en ${langue}.`;
         }
     </script>
 </body>

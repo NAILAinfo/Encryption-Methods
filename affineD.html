@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chiffrement Affine</title>
+    <title>Déchiffrement Affine</title>
     <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
     <div class="container">
-        <h1>Chiffrement Affine</h1>
+        <h1>Déchiffrement Affine</h1>
 
-        <h2>Entrez le texte clair :</h2>
+        <h2>Entrez le texte chiffré :</h2>
         <input type="text" id="info1" placeholder="Votre message ici...">
 
         <h2>Entrez la clé (a, b) :</h2>
         <input type="text" id="info2" placeholder="Exemple : 5,8">
 
-        <button onclick="afficherInfos()">Chiffrer</button>
+        <button onclick="afficherInfos()">Déchiffrer</button>
         <p id="result"></p>
     </div>
 
     <script type="module">
-        import { affineEncrypt } from './script.js';
+        import { affineDecrypt } from './script.js';
 
         function afficherInfos() {
             let info1 = document.getElementById("info1").value;
@@ -29,8 +29,8 @@
 
             let keys = info2.split(',').map(Number);
             if (info1 && keys.length === 2) {
-                let texteChiffre = affineEncrypt(info1, keys[0], keys[1]);
-                document.getElementById("result").innerText = "Texte chiffré : " + texteChiffre;
+                let texteDechiffre = affineDecrypt(info1, keys[0], keys[1]);
+                document.getElementById("result").innerText = "Texte clair : " + texteDechiffre;
             } else {
                 document.getElementById("result").innerText = "Veuillez remplir correctement les champs.";
             }

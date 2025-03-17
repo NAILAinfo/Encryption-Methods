@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Déchiffrement Playfair</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <div class="container">
+        <h1>Déchiffrement Playfair</h1>
+
+        <h2>Entrez le texte chiffré :</h2>
+        <input type="text" id="info1" placeholder="Votre message ici...">
+
+        <h2>Entrez la clé :</h2>
+        <input type="text" id="info2" placeholder="Exemple : MONARCHIE">
+        
+        <p><small>Note : La matrice 5x5 utilisera l'alphabet français (avec I et J séparés, sans W)</small></p>
+
+        <button onclick="afficherInfos()">Déchiffrer</button>
+        <p id="result"></p>
+    </div>
+
+    <script type="module">
+      
+
+        function afficherInfos() {
+            let info1 = document.getElementById("info1").value;
+            let info2 = document.getElementById("info2").value;
+
+            if (info1 && info2) {
+                let texteDechiffre = playfairDecrypt(info1, info2);
+                document.getElementById("result").innerText = "Texte clair : " + texteDechiffre;
+            } else {
+                document.getElementById("result").innerText = "Veuillez remplir correctement les champs.";
+            }
+        }
+        window.afficherInfos = afficherInfos;
+         
+        export function playfairDecrypt(text, key) {
+            // Préparer le texte chiffré et la clé
+            text = text.toUpperCase().replace(/[^A-Z]/g, "");
+            let matrix = createPlayfairMatrix(key);
+            
+            let result = "";
+            // Traiter le texte par paires de caractères
+            for (let i = 0; i < text.length; i += 2) {
+                let pair = text.substring(i, i + 2);
+                let decrypted = decryptPair(pair, matrix);
+                result += decrypted;
+            }
+            
+            return result;
+        }
+        function prepareText(text) {
+            // Convertir en majuscules et retirer les caractères non alphabétiques
+            text = text.toUpperCase().replace(/[^A-Z]/g, "");
+            
+            // Insérer X entre les lettres doubles
+            let prepared = "";
+            for (let i = 0; i < text.length; i++) {
+                prepared += text[i];
+                if (i < text.length - 1 && text[i] === text[i + 1]) {
+                    prepared += "X";
+                }
+            }
+            
+            // Ajouter X à la fin si le nombre de caractères est impair
+            if (prepared.length % 2 !== 0) {
+                prepared += "X";
+            }
+            
+            return prepared;
+        }
+        function createPlayfairMatrix(key) {
+            // Convertir la clé en majuscules et retirer les caractères non alphabétiques
+            key = key.toUpperCase().replace(/[^A-Z]/g, "");
+            
+            // Créer la matrice 5x5 sans W pour le français
+            let alphabet = "ABCDEFGHIJKLMNOPQRSTUVXYZ"; // Sans W
+            let matrix = [];
+            let used = {};
+            
+            // Ajouter d'abord les caractères de la clé
+            for (let i = 0; i < key.length; i++) {
+                if (!used[key[i]]) {
+                    matrix.push(key[i]);
+                    used[key[i]] = true;
+                }
+            }
+            
+            // Ajouter le reste de l'alphabet
+            for (let i = 0; i < alphabet.length; i++) {
+                if (!used[alphabet[i]]) {
+                    matrix.push(alphabet[i]);
+                }
+            }
+            
+            return matrix;
+        }
+        function getPosition(char, matrix) {
+            let pos = matrix.indexOf(char);
+            return {
+                row: Math.floor(pos / 5),
+                col: pos % 5
+            };
+        }
+
+        function decryptPair(pair, matrix) {
+            let pos1 = getPosition(pair[0], matrix);
+            let pos2 = getPosition(pair[1], matrix);
+            
+            let char1, char2;
+            
+            if (pos1.row === pos2.row) {
+                // Même ligne - décalage à gauche
+                char1 = matrix[pos1.row * 5 + (pos1.col - 1 + 5) % 5];
+                char2 = matrix[pos2.row * 5 + (pos2.col - 1 + 5) % 5];
+            } else if (pos1.col === pos2.col) {
+                // Même colonne - décalage vers le haut
+                char1 = matrix[((pos1.row - 1 + 5) % 5) * 5 + pos1.col];
+                char2 = matrix[((pos2.row - 1 + 5) % 5) * 5 + pos2.col];
+            } else {
+                // Règle du rectangle
+                char1 = matrix[pos1.row * 5 + pos2.col];
+                char2 = matrix[pos2.row * 5 + pos1.col];
+            }
+            
+            return char1 + char2;
+        }
+
+        
+    </script>
+</body>
+</html>

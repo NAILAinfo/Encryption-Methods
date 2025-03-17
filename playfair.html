@@ -4,328 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chiffrement Playfair</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .matrix-container {
-            margin: 20px 0;
-        }
-        .matrix {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-gap: 5px;
-            margin-top: 10px;
-        }
-        .matrix-cell {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 40px;
-            height: 40px;
-            background-color: #e9e9e9;
-            border: 1px solid #ccc;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-right: 10px;
-        }
-        .btn:hover {
-            background-color: #45a049;
-        }
-        .result {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border-left: 5px solid #4CAF50;
-        }
-        .instructions {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 30px;
-            border-left: 5px solid #2196F3;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
     <div class="container">
-        <h1>Chiffrement et Déchiffrement Playfair</h1>
+        <h1>Chiffrement Playfair</h1>
+
+        <h2>Entrez le texte clair :</h2>
+        <input type="text" id="info1" placeholder="Votre message ici...">
+
+        <h2>Entrez la clé :</h2>
+        <input type="text" id="info2" placeholder="Clé...">
         
-        <div class="form-group">
-            <label for="key">Clé:</label>
-            <input type="text" id="key" placeholder="Entrez votre clé (sans la lettre W)" >
-            <button class="btn" onclick="generateMatrix()">Générer la matrice</button>
-        </div>
-        
-        <div class="matrix-container">
-            <label>Matrice Playfair:</label>
-            <div id="matrix" class="matrix"></div>
-        </div>
-        
-        <div class="form-group">
-            <label for="plaintext">Texte à chiffrer:</label>
-            <input type="text" id="plaintext" placeholder="Entrez le texte à chiffrer">
-        </div>
-        
-        <button class="btn" onclick="encrypt()">Chiffrer</button>
-        
-        <div class="form-group">
-            <label for="ciphertext">Texte chiffré:</label>
-            <input type="text" id="ciphertext" placeholder="Entrez le texte à déchiffrer">
-        </div>
-        
-        <button class="btn" onclick="decrypt()">Déchiffrer</button>
-        
-        <div id="result" class="result" style="display: none;"></div>
-        
-        <div class="instructions">
-            <h3>Instructions:</h3>
-            <ol>
-                <li>Entrez une clé (sans la lettre W) et cliquez sur "Générer la matrice"</li>
-                <li>Pour chiffrer, entrez un texte dans le champ "Texte à chiffrer" et cliquez sur "Chiffrer"</li>
-                <li>Pour déchiffrer, entrez un texte dans le champ "Texte chiffré" et cliquez sur "Déchiffrer"</li>
-            </ol>
-            <p><strong>Note:</strong> Le chiffre Playfair utilise des paires de lettres. Si une paire contient deux fois la même lettre ou si le message a un nombre impair de lettres, des "X" sont ajoutés.</p>
-        </div>
+        <p><small>Note : La matrice 5x5 utilisera l'alphabet français (avec I et J séparés, sans W)</small></p>
+
+        <button onclick="afficherInfos()">Chiffrer</button>
+        <p id="result"></p>
     </div>
-    
-    <script>
-        let matrix = [];
-        const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVXYZ"; // Sans W
-        
-        // Initialisation au chargement de la page
-        window.onload = function() {
-            generateMatrix();
-        };
-        
-        // Génération de la matrice Playfair basée sur la clé
-        function generateMatrix() {
-            matrix = [];
-            const matrixDiv = document.getElementById("matrix");
-            matrixDiv.innerHTML = "";
-            
-            let key = document.getElementById("key").value.toUpperCase();
-            
-            // Suppression des W et transformation des lettres accentuées
-            key = normalizeText(key);
-            
-            // Élimination des lettres répétées dans la clé
-            let keyChars = [];
-            for (let i = 0; i < key.length; i++) {
-                if (!keyChars.includes(key[i]) && key[i] !== 'W') {
-                    keyChars.push(key[i]);
-                }
-            }
-            
-            // Ajout du reste de l'alphabet
-            for (let i = 0; i < ALPHABET.length; i++) {
-                if (!keyChars.includes(ALPHABET[i])) {
-                    keyChars.push(ALPHABET[i]);
-                }
-            }
-            
-            // Création de la matrice 5x5
-            let index = 0;
-            for (let i = 0; i < 5; i++) {
-                let row = [];
-                for (let j = 0; j < 5; j++) {
-                    row.push(keyChars[index]);
-                    
-                    // Création de la cellule dans l'interface
-                    const cell = document.createElement("div");
-                    cell.className = "matrix-cell";
-                    cell.textContent = keyChars[index];
-                    matrixDiv.appendChild(cell);
-                    
-                    index++;
-                }
-                matrix.push(row);
+
+    <script type="module">
+
+        function afficherInfos() {
+            let info1 = document.getElementById("info1").value;
+            let info2 = document.getElementById("info2").value;
+
+            if (info1 && info2) {
+                let texteChiffre = playfairEncrypt(info1, info2);
+                document.getElementById("result").innerText = "Texte chiffré : " + texteChiffre;
+            } else {
+                document.getElementById("result").innerText = "Veuillez remplir correctement les champs.";
             }
         }
-        
-        // Préparation du texte pour le chiffrement
+        window.afficherInfos = afficherInfos;
+
+        function playfairEncrypt(text, key) {
+            // Préparer le texte et la clé
+            text = prepareText(text);
+            let matrix = createPlayfairMatrix(key);
+            
+            let result = "";
+            // Traiter le texte par paires de caractères
+            for (let i = 0; i < text.length; i += 2) {
+                let pair = text.substring(i, i + 2);
+                let encrypted = encryptPair(pair, matrix);
+                result += encrypted;
+            }
+            
+            return result;
+        }
+         
         function prepareText(text) {
-            // Normalisation et mise en majuscules
-            let prepared = normalizeText(text);
+            // Convertir en majuscules et retirer les caractères non alphabétiques
+            text = text.toUpperCase().replace(/[^A-Z]/g, "");
             
-            // Division en digraphes (paires de lettres)
-            let digraphs = [];
-            let i = 0;
-            
-            while (i < prepared.length) {
-                // Si c'est le dernier caractère ou si deux caractères consécutifs sont identiques
-                if (i === prepared.length - 1 || prepared[i] === prepared[i + 1]) {
-                    digraphs.push(prepared[i] + 'X');
-                    i++;
-                } else {
-                    digraphs.push(prepared[i] + prepared[i + 1]);
-                    i += 2;
+            // Insérer X entre les lettres doubles
+            let prepared = "";
+            for (let i = 0; i < text.length; i++) {
+                prepared += text[i];
+                if (i < text.length - 1 && text[i] === text[i + 1]) {
+                    prepared += "X";
                 }
             }
             
-            return digraphs;
+            // Ajouter X à la fin si le nombre de caractères est impair
+            if (prepared.length % 2 !== 0) {
+                prepared += "X";
+            }
+            
+            return prepared;
         }
         
-        // Normalisation du texte (majuscules, sans accents, sans W)
-        function normalizeText(text) {
-            // Convertir en majuscules et supprimer les espaces
-            text = text.toUpperCase().replace(/\s/g, '');
+        function createPlayfairMatrix(key) {
+            // Convertir la clé en majuscules et retirer les caractères non alphabétiques
+            key = key.toUpperCase().replace(/[^A-Z]/g, "");
             
-            // Remplacer les caractères accentués
-            text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            // Créer la matrice 5x5 sans W pour le français
+            let alphabet = "ABCDEFGHIJKLMNOPQRSTUVXYZ"; // Sans W
+            let matrix = [];
+            let used = {};
             
-            // Remplacer W par V (convention française)
-            text = text.replace(/W/g, 'V');
+            // Ajouter d'abord les caractères de la clé
+            for (let i = 0; i < key.length; i++) {
+                if (!used[key[i]]) {
+                    matrix.push(key[i]);
+                    used[key[i]] = true;
+                }
+            }
             
-            // Ne garder que les lettres
-            return text.replace(/[^A-Z]/g, '');
+            // Ajouter le reste de l'alphabet
+            for (let i = 0; i < alphabet.length; i++) {
+                if (!used[alphabet[i]]) {
+                    matrix.push(alphabet[i]);
+                }
+            }
+            
+            return matrix;
         }
         
-        // Trouver les coordonnées d'une lettre dans la matrice
-        function findPosition(letter) {
-            for (let i = 0; i < 5; i++) {
-                for (let j = 0; j < 5; j++) {
-                    if (matrix[i][j] === letter) {
-                        return { row: i, col: j };
-                    }
-                }
-            }
-            return null;
+        function getPosition(char, matrix) {
+            let pos = matrix.indexOf(char);
+            return {
+                row: Math.floor(pos / 5),
+                col: pos % 5
+            };
         }
         
-        // Chiffrement
-        function encrypt() {
-            const plaintext = document.getElementById("plaintext").value;
-            if (!plaintext) {
-                alert("Veuillez entrer un texte à chiffrer");
-                return;
+        function encryptPair(pair, matrix) {
+            let pos1 = getPosition(pair[0], matrix);
+            let pos2 = getPosition(pair[1], matrix);
+            
+            let char1, char2;
+            
+            if (pos1.row === pos2.row) {
+                // Même ligne - décalage à droite
+                char1 = matrix[pos1.row * 5 + (pos1.col + 1) % 5];
+                char2 = matrix[pos2.row * 5 + (pos2.col + 1) % 5];
+            } else if (pos1.col === pos2.col) {
+                // Même colonne - décalage vers le bas
+                char1 = matrix[((pos1.row + 1) % 5) * 5 + pos1.col];
+                char2 = matrix[((pos2.row + 1) % 5) * 5 + pos2.col];
+            } else {
+                // Règle du rectangle
+                char1 = matrix[pos1.row * 5 + pos2.col];
+                char2 = matrix[pos2.row * 5 + pos1.col];
             }
             
-            const digraphs = prepareText(plaintext);
-            let encryptedText = "";
-            
-            for (let i = 0; i < digraphs.length; i++) {
-                const firstChar = digraphs[i][0];
-                const secondChar = digraphs[i][1];
-                
-                const pos1 = findPosition(firstChar);
-                const pos2 = findPosition(secondChar);
-                
-                let newFirstChar, newSecondChar;
-                
-                // Même ligne
-                if (pos1.row === pos2.row) {
-                    newFirstChar = matrix[pos1.row][(pos1.col + 1) % 5];
-                    newSecondChar = matrix[pos2.row][(pos2.col + 1) % 5];
-                }
-                // Même colonne
-                else if (pos1.col === pos2.col) {
-                    newFirstChar = matrix[(pos1.row + 1) % 5][pos1.col];
-                    newSecondChar = matrix[(pos2.row + 1) % 5][pos2.col];
-                }
-                // Rectangle
-                else {
-                    newFirstChar = matrix[pos1.row][pos2.col];
-                    newSecondChar = matrix[pos2.row][pos1.col];
-                }
-                
-                encryptedText += newFirstChar + newSecondChar;
-            }
-            
-            document.getElementById("ciphertext").value = encryptedText;
-            showResult("Texte chiffré: " + encryptedText);
+            return char1 + char2;
         }
         
-        // Déchiffrement
-        function decrypt() {
-            const ciphertext = document.getElementById("ciphertext").value;
-            if (!ciphertext) {
-                alert("Veuillez entrer un texte à déchiffrer");
-                return;
-            }
-            
-            const digraphs = prepareText(ciphertext);
-            let decryptedText = "";
-            
-            for (let i = 0; i < digraphs.length; i++) {
-                const firstChar = digraphs[i][0];
-                const secondChar = digraphs[i][1];
-                
-                const pos1 = findPosition(firstChar);
-                const pos2 = findPosition(secondChar);
-                
-                let newFirstChar, newSecondChar;
-                
-                // Même ligne
-                if (pos1.row === pos2.row) {
-                    newFirstChar = matrix[pos1.row][(pos1.col + 4) % 5]; // +4 mod 5 équivaut à -1 mod 5
-                    newSecondChar = matrix[pos2.row][(pos2.col + 4) % 5];
-                }
-                // Même colonne
-                else if (pos1.col === pos2.col) {
-                    newFirstChar = matrix[(pos1.row + 4) % 5][pos1.col];
-                    newSecondChar = matrix[(pos2.row + 4) % 5][pos2.col];
-                }
-                // Rectangle
-                else {
-                    newFirstChar = matrix[pos1.row][pos2.col];
-                    newSecondChar = matrix[pos2.row][pos1.col];
-                }
-                
-                decryptedText += newFirstChar + newSecondChar;
-            }
-            
-            // Suppression des X ajoutés
-            decryptedText = decryptedText.replace(/X$/, '').replace(/([A-Z])X\1/g, "$1$1");
-            
-            document.getElementById("plaintext").value = decryptedText;
-            showResult("Texte déchiffré: " + decryptedText);
-        }
-        
-        // Affichage du résultat
-        function showResult(message) {
-            const resultDiv = document.getElementById("result");
-            resultDiv.textContent = message;
-            resultDiv.style.display = "block";
-        }
+       
+       
+
+
+
     </script>
+   
 </body>
 </html>

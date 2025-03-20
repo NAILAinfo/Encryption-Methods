@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Déchiffrement de Hill</title>
     <link rel="stylesheet" href="style.css"> 
+    <script src="script.js"></script>
 </head>
 <body>
     <div class="container">
@@ -20,8 +21,7 @@
         <p id="result"></p>
     </div>
 
-    <script type="module">
-        import { hillD } from './script.js';
+    <script >
 
         function afficherInfos() {
             let info1 = document.getElementById("info1").value;
@@ -34,7 +34,6 @@
                 document.getElementById("result").innerText = "Veuillez remplir les deux champs.";
             }
         }
-        window.afficherInfos = afficherInfos; 
     </script>
 </body>
 </html>

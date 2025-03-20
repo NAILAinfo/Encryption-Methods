@@ -10,10 +10,10 @@
     <div class="container">
         <h1>Chiffrement de Hill</h1>
 
-        <h2>Entrez le texte clair :</h2>
+        <h3>Entrez le texte clair :</h3>
         <input type="text" id="info1" placeholder="Votre message ici...">
 
-        <h2>Entrez la matrice clé 2*2 (exemple : "2,3;1,4") :</h2>
+        <h5>Entrez la matrice clé 2×2 (exemple : "2,3;1,4") :</h5>
         <input type="text" id="info2" placeholder="Exemple : 2,3;1,4">
 
         <button onclick="afficherInfos()">Chiffrer</button>
@@ -26,7 +26,7 @@
         function afficherInfos() {
             let info1 = document.getElementById("info1").value;
             let info2 = document.getElementById("info2").value;
-        
+
             if (info1 && info2) {
                 let texteChiffre = hill(info1, info2);
                 document.getElementById("result").innerText = "Texte chiffré : " + texteChiffre;
@@ -34,7 +34,7 @@
                 document.getElementById("result").innerText = "Veuillez remplir les deux champs.";
             }
         }
-        window.afficherInfos = afficherInfos; 
+        window.afficherInfos = afficherInfos;
     </script>
 </body>
 </html>

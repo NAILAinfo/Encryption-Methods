@@ -9,7 +9,7 @@ export function valeurAlpha(c){
 }
 
 
-export function cesare(msg, decalage) {
+function cesare(msg, decalage) {
     let result = "";
     msg = msg.toUpperCase();
 

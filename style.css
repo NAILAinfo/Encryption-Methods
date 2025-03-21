@@ -355,3 +355,11 @@ h1 {
   color: #333;
   box-shadow: 0 5px 15px rgba(0, 98, 255, 0.1);
 }
+
+nav{
+  display: flex;
+  justify-content: space-between;
+  padding: 0 100px;
+  align-items: center;
+  height: 120px;
+}

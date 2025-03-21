@@ -10,10 +10,10 @@
     <div class="container">
         <h1>Chiffrement de César</h1>
 
-        <h3>Entrez le texte clair :</h3>
+        <h2>Entrez le texte clair :</h2>
         <input type="text" id="info1" placeholder="Votre message ici...">
 
-        <h3>Entrez le numéro de décalage :</h3>
+        <h2>Entrez le numéro de décalage :</h2>
         <input type="number" id="info2" placeholder="exemple : 3">
         
         <button onclick="afficherInfos()">Chiffrer</button>
@@ -21,6 +21,14 @@
     </div>
 
     <script>
+        function valeurNum(c){
+            return c.charCodeAt(0) - 65;
+        }
+
+        function valeurAlpha(c){
+            return String.fromCharCode(c + 65);
+        }
+
         function cesare(msg, decalage) {
             let result = "";
             msg = msg.toUpperCase();
@@ -28,11 +36,11 @@
             for (let i = 0; i < msg.length; i++) {
                 let char = msg[i];
                 if (char >= 'A' && char <= 'Z') {
-                    let codeChiffre = (char.charCodeAt(0) - 65 + decalage) % 26;
+                    let codeChiffre = (valeurNum(char) + decalage) % 26;
                     if (codeChiffre < 0) {
                         codeChiffre += 26; 
                     }
-                    result += String.fromCharCode(codeChiffre + 65);
+                    result += valeurAlpha(codeChiffre);
                 } else {
                     result += char;
                 }
@@ -45,16 +53,16 @@
             let info2 = parseInt(document.getElementById("info2").value);
 
             if (isNaN(info2)) {
-                document.getElementById("result").innerText = "❌ Décalage invalide !";
-                return;
-            }
-            if (info1.trim() === "") {
-                document.getElementById("result").innerText = "⚠️ Veuillez entrer un message.";
+                document.getElementById("result").innerText = "Décalage invalide !";
                 return;
             }
 
-            let texteChiffre = cesare(info1, info2);
-            document.getElementById("result").innerText = "🔐 Texte chiffré : " + texteChiffre;
+            if (info1 && info2) {
+                let texteChiffre = cesare(info1, info2);
+                document.getElementById("result").innerText = "Texte chiffré : " + texteChiffre;
+            } else {
+                document.getElementById("result").innerText = "Veuillez remplir les deux champs.";
+            }
         }
     </script>
 </body>

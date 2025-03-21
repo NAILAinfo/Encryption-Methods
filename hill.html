@@ -13,17 +13,57 @@
         <h3>Entrez le texte clair :</h3>
         <input type="text" id="info1" placeholder="Votre message ici...">
 
-        <h5>Entrez la matrice clé 2×2 (exemple : "2,3;1,4") :</h5>
+        <h3>Entrez la matrice clé 2×2 (exemple : "2,3;1,4") :</h3>
         <input type="text" id="info2" placeholder="Exemple : 2,3;1,4">
 
-        <button onclick="afficherInfos()">Chiffrer</button>
+        <button onclick="afficherInfosChiffrement()">Chiffrer</button>
         <p id="result"></p>
     </div>
 
-    <script type="module">
-        import { hill } from './script.js';
+    <script>
+        function parseMatrix(matrixString) {
+            return matrixString.split(";").map(row => row.split(",").map(Number));
+        }
 
-        function afficherInfos() {
+        function textToVector(text, size) {
+            let vector = text.toUpperCase().split("").map(char => char.charCodeAt(0) - 65);
+            while (vector.length % size !== 0) {
+                vector.push(23); // Remplissage avec 'X'
+            }
+            return chunkArray(vector, size);
+        }
+
+        function vectorToText(vector) {
+            return vector.flat().map(num => String.fromCharCode((num % 26) + 65)).join("");
+        }
+
+        function multiplyMatrixVector(matrix, vector) {
+            return vector.map(v =>
+                matrix.map(row =>
+                    row.reduce((sum, val, i) => sum + val * v[i], 0) % 26
+                )
+            );
+        }
+
+        function chunkArray(arr, size) {
+            let result = [];
+            for (let i = 0; i < arr.length; i += size) {
+                result.push(arr.slice(i, i + size));
+            }
+            return result;
+        }
+
+        function hill(text, matrixString) {
+            let matrix = parseMatrix(matrixString);
+            if (!matrix) return "Erreur : Matrice invalide !";
+
+            let textVector = textToVector(text, matrix.length);
+            let encryptedVector = multiplyMatrixVector(matrix, textVector);
+
+            return vectorToText(encryptedVector);
+        }
+
+        function afficherInfosChiffrement() {
             let info1 = document.getElementById("info1").value;
             let info2 = document.getElementById("info2").value;
 
@@ -34,7 +74,6 @@
                 document.getElementById("result").innerText = "Veuillez remplir les deux champs.";
             }
         }
-        window.afficherInfos = afficherInfos;
     </script>
 </body>
 </html>

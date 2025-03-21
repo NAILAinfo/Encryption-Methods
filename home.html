@@ -3,93 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La cryptographie classique </title>
-    <style>
-              * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f4f4f4;
-            padding: 20px;
-            gap: 20px;
-        }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 300px; /* Assure une même largeur pour toutes les divs */
-            height: 400px; /* Hauteur uniforme */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 400px; /* Hauteur uniforme */
-        }
-        h2 {
-            margin-bottom: 15px;
-            font-size: 1.2em;
-            color: #333;
-        }
-        button {
-            background-color: #207ed1;
-            color: white;
-            border: none;
-            padding: 12px;
-            cursor: pointer;
-            border-radius: 4px;
-            width: 100%;
-            margin: 5px 0;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #result {
-            margin-top: 15px;
-            font-weight: bold;
-            color: #333;
-        }
-
-    </style>
+    <title>Cryptographie</title>
+    <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
-    <div class="container">
-        <h1>Chiffrement </h1>
-        <button onclick="window.location.href='atbash.html'">Atbash</button>
-        <button onclick="window.location.href='cesare.html'">Chiffrement de César</button>
-        <button onclick="window.location.href='substitution.html'">Substitution aléatoire</button>
-        <button onclick="window.location.href='affine.html'">Chiffrement de Affine</button>
-        <button onclick="window.location.href='hill.html'">Chiffrement de Hill</button>
-        <button onclick="window.location.href='playfair.html'">Chiffrement de Playfair</button>
-        <button onclick="window.location.href='vignere.html'">Chiffrement de Vigenère</button>
-        <button onclick="window.location.href='otp.html'">One Time Pad</button>
-    </div>
-    <div class="container">  
-        <h1>Déchiffrement </h1>
-        <button onclick="window.location.href='scytaleD.html'">Scytale (côté déchiffrement)</button>
-        <button onclick="window.location.href='cesarD.html'">Déchiffrement de César</button>
-        <button onclick="window.location.href='affineD.html'">Déchiffrement de Affine</button>
-        <button onclick="window.location.href='hillD.html'">Déchiffrement de Hill</button>
-        <button onclick="window.location.href='playfairD.html'">Déchiffrement de Playfair</button>
-        <button onclick="window.location.href='vignereD.html'">Déchiffrement de Vigenère</button>
-      </div> 
-      <div class="container"> 
-        <h1>Cryptanalyse </h1> 
-        <button onclick="window.location.href='frequentielle.html'">Analyse fréquentielle</button>
-        <button onclick="window.location.href='kasiski.html'">Test de Kasiski</button>
-        <button onclick="window.location.href='mot_probable.html'">Méthode de mot probable</button>
-        <button onclick="window.location.href='coincidence.html'">Indice de coïncidence</button>
-    </div>
+    <h1>Bienvenue dans l'outil de cryptographie</h1>
     
+    <div class="wrapper">
+        <div class="container">
+            <h2>Chiffrement</h2>
+            <button onclick="window.location.href='atbash.html'">Atbash</button>
+            <button onclick="window.location.href='CESAR.html'">César</button>
+            <button onclick="window.location.href='vignere.html'">Vigenère</button>
+            <button onclick="window.location.href='hill.html'">Hill</button>
+            <button onclick="window.location.href='affine.html'">Affine</button>
+            <button onclick="window.location.href='scytale.html'">Scytale</button>
+            <button onclick="window.location.href='substitution_alt.html'">Substitution aleatoire</button>
+            <button onclick="window.location.href='OTP.html'">One Time Pad</button>
+            <button onclick="window.location.href='playfair.html'">Playfair</button>           
+            
+           
+
+        </div>
+        
+        <div class="container">
+            <h2>Déchiffrement</h2>
+            <button onclick="window.location.href='atbashD.html'">Atbash</button>
+            <button onclick="window.location.href='cesarD.html'">César</button>
+            <button onclick="window.location.href='vignereD.html'">Vigenère</button>
+            <button onclick="window.location.href='hillD.html'">Hill</button>
+            <button onclick="window.location.href='affineD.html'">Affine</button>
+            <button onclick="window.location.href='scytaleD.html'">Scytale</button>
+            <button onclick="window.location.href='substitution_altD.html'">Substitution aleatoire</button>
+        </div>
+        
+        <div class="container">
+            <h2>Analyses Cryptographiques</h2>
+            <button onclick="window.location.href='analyseFrequentielle.html'">Analyse Fréquentielle</button>
+            <button onclick="window.location.href='kasiski.html'">Test de Kasiski</button>
+            <button onclick="window.location.href='coincidence.html'">Indice de Coïncidence</button>
+            <button onclick="window.location.href='motProbable.html'">Mot probable</button>
+        </div>
+    </div>
 </body>
 </html>

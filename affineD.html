@@ -4,155 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Déchiffrement Affine</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 400px;
-            background: white;
-            padding: 20px;
-            margin: auto;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .input-group {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 10px 0;
-        }
-
-        .input-group label {
-            font-weight: bold;
-            margin-right: 10px;
-            white-space: nowrap;
-        }
-
-        .input-group input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        button {
-            background-color: green;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: darkgreen;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
     <div class="container">
         <h1>Déchiffrement Affine</h1>
 
-        <h3>Entrez le texte chiffré :</h3>
-        <input type="text" id="info1" placeholder="votre message ici...">
+        <h2>Entrez le texte chiffré :</h2>
+        <input type="text" id="info1" placeholder="Votre message ici...">
 
-        <h3>Entrez la clé (a, b) :</h3>
-
-        <div class="input-group">
-            <label for="infoA">a :</label>
-            <input type="number" id="infoA" placeholder="un parmie:1,3,5,7,9,11,15,17,19,21,23,25">
-        </div>
-
-        <div class="input-group">
-            <label for="infoB">b :</label>
-            <input type="number" id="infoB" placeholder="Exemple : 8">
-        </div>
+        <h2>Entrez la clé (a, b) :</h2>
+        <input type="text" id="info2" placeholder="Exemple : 5,8">
 
         <button onclick="afficherInfos()">Déchiffrer</button>
         <p id="result"></p>
     </div>
 
-    <script >
-function pgcd(a, b) {
-            while (b !== 0) {
-                let temp = b;
-                b = a % b;
-                a = temp;
-            }
-            return a;
-        }
-
+    <script>
         function modInverse(a, m) {
-            a = ((a % m) + m) % m; // S'assurer que `a` est positif
+            a = ((a % m) + m) % m;
             for (let x = 1; x < m; x++) {
-                if ((a * x) % m === 1) {
-                    return x;
-                }
+                if ((a * x) % m === 1) return x;
             }
-            return null; // Retourne `null` si l'inverse n'existe pas
+            return null;
         }
 
-        function affineDecrypt(cipher, a, b) {
-            let a_inv = modInverse(a, 26);
-            if (a_inv === null) {
-                return "❌ Erreur : 'a' n'a pas d'inverse modulaire.";
-            }
+        function affineDecrypt(text, a, b) {
+            let aInv = modInverse(a, 26);
+            if (aInv === null) return "Erreur : 'a' n'a pas d'inverse mod 26 !";
 
-            let result = "";
-            cipher = cipher.toUpperCase();
-
-            for (let i = 0; i < cipher.length; i++) {
-                let char = cipher[i];
-                if (char >= 'A' && char <= 'Z') {
-                    let C = char.charCodeAt(0) - 65;
-                    let P = (a_inv * (C - b + 26)) % 26;
-                    result += String.fromCharCode(P + 65);
-                } else {
-                    result += char; // Conserve les espaces et les caractères non alphabétiques
-                }
-            }
-            return result;
+            return text.toUpperCase().split("").map(char => {
+                if (char < "A" || char > "Z") return char;
+                let y = char.charCodeAt(0) - 65;
+                return String.fromCharCode(((aInv * (y - b + 26)) % 26) + 65);
+            }).join("");
         }
 
         function afficherInfos() {
-            let texteChiffre = document.getElementById("info1").value;
-            let a = document.getElementById("infoA").value;
-            let b = document.getElementById("infoB").value;
+            let info1 = document.getElementById("info1").value;
+            let info2 = document.getElementById("info2").value;
 
-            if (!texteChiffre || !a || !b) {
-                document.getElementById("result").innerText = "Veuillez remplir tous les champs.";
-                return;
+            let keys = info2.split(',').map(Number);
+            if (info1 && keys.length === 2) {
+                let texteDechiffre = affineDecrypt(info1, keys[0], keys[1]);
+                document.getElementById("result").innerText = "Texte clair : " + texteDechiffre;
+            } else {
+                document.getElementById("result").innerText = "Veuillez remplir correctement les champs.";
             }
-
-            a = parseInt(a);
-            b = parseInt(b);
-
-            if (isNaN(a) || isNaN(b)) {
-                document.getElementById("result").innerText = "Les valeurs de a et b doivent être des nombres.";
-                return;
-            }
-
-            let texteDechiffre = affineDecrypt(texteChiffre, a, b);
-            document.getElementById("result").innerText = "Texte clair : " + texteDechiffre;
         }
 
+        window.afficherInfos = afficherInfos;
     </script>
 </body>
 </html>

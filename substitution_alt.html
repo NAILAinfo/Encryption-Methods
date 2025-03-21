@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chiffrement par Substitution Aléatoire</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <div class="container">
+        <h1>Chiffrement par Substitution Aléatoire</h1>
+
+        <h2>Entrez le texte clair :</h2>
+        <input type="text" id="info1" placeholder="Votre message ici...">
+
+        <button onclick="afficherInfos()">Chiffrer</button>
+        <p id="result"></p>
+        <h3>Clé utilisée :</h3>
+        <textarea id="keyOutput" readonly></textarea>
+    </div>
+
+    <script>
+        function generateRandomKey() {
+            let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+            let shuffled = alphabet.slice().sort(() => Math.random() - 0.5);
+            let keyMap = {};
+            alphabet.forEach((char, index) => {
+                keyMap[char] = shuffled[index];
+            });
+            return keyMap;
+        }
+
+        function substitutionEncrypt(text, keyMap) {
+            return text.toUpperCase().split(" ").map(word => 
+                word.split("").map(char => keyMap[char] || char).join("")
+            ).join(" ");
+        }
+
+        function afficherInfos() {
+            let info1 = document.getElementById("info1").value;
+            
+            if (info1) {
+                let keyMap = generateRandomKey();
+                let texteChiffre = substitutionEncrypt(info1, keyMap);
+                document.getElementById("result").innerText = "Texte chiffré : " + texteChiffre;
+                document.getElementById("keyOutput").value = JSON.stringify(keyMap, null, 2);
+            } else {
+                document.getElementById("result").innerText = "Veuillez entrer un message.";
+            }
+        }
+
+        window.afficherInfos = afficherInfos;
+    </script>
+</body>
+</html>

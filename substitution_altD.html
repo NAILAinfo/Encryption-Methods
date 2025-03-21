@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Déchiffrement par Substitution Aléatoire</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <div class="container">
+        <h1>Déchiffrement par Substitution Aléatoire</h1>
+
+        <h2>Entrez le texte chiffré :</h2>
+        <input type="text" id="info1" placeholder="Votre message ici...">
+
+        <h2>Entrez la clé de substitution (format JSON) :</h2>
+        <textarea id="info2" placeholder='Exemple : {"A":"X", "B":"M", ...}'></textarea>
+
+        <button onclick="afficherInfos()">Déchiffrer</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function reverseKeyMap(keyMap) {
+            let reversedMap = {};
+            for (let key in keyMap) {
+                reversedMap[keyMap[key]] = key;
+            }
+            return reversedMap;
+        }
+
+        function substitutionDecrypt(text, keyMap) {
+            let reversedMap = reverseKeyMap(keyMap);
+            return text.toUpperCase().split(" ").map(word => 
+                word.split("").map(char => reversedMap[char] || char).join("")
+            ).join(" ");
+        }
+
+        function afficherInfos() {
+            let info1 = document.getElementById("info1").value;
+            let info2 = document.getElementById("info2").value;
+            
+            try {
+                let keyMap = JSON.parse(info2);
+                if (info1 && Object.keys(keyMap).length > 0) {
+                    let texteDechiffre = substitutionDecrypt(info1, keyMap);
+                    document.getElementById("result").innerText = "Texte clair : " + texteDechiffre;
+                } else {
+                    document.getElementById("result").innerText = "Veuillez remplir correctement les champs.";
+                }
+            } catch (e) {
+                document.getElementById("result").innerText = "Format de clé invalide. Utilisez un JSON valide.";
+            }
+        }
+
+        window.afficherInfos = afficherInfos;
+    </script>
+</body>
+</html>

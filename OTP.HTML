@@ -16,8 +16,17 @@
         <p id="result"></p>
     </div>
 
-    <script type="module">
-        import { valeurNum, valeurAlpha } from './script.js';
+    <script>
+      function valeurNum(char) {
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let index = alphabet.indexOf(char.toUpperCase());
+            return index !== -1 ? index : 0;
+        }
+
+        function valeurAlpha(num) {
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            return alphabet[num % 26];
+        }
 
         function genererCleAleatoire(longueur) {
             const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -35,8 +44,8 @@
             let messageChiffre = "";
 
             for (let i = 0; i < msg.length; i++) {
-                let charCodeTexte = valeurNum(msg[i]) ; 
-                let charCodeCle = valeurNum(cle[i]) ;  
+                let charCodeTexte = valeurNum(msg[i]); 
+                let charCodeCle = valeurNum(cle[i]);  
                 let xorCode = charCodeTexte ^ charCodeCle; 
                 messageChiffre += valeurAlpha(xorCode);
             }
@@ -52,7 +61,7 @@
             document.getElementById("result").textContent = resultat.messageChiffre;
         }
 
-        document.getElementById("chiffrerBtn").addEventListener("click", afficherInfos);
+        document.getElementById("chiffrerBtn").addEventListener("click", afficherInfos);   
     </script>
 </body>
 </html>

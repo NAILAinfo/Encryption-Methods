@@ -3,27 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chiffrement de Vigenère</title>
+    <title>Déchiffrement de Vigenère</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        #result {
-    width: 100%;
-    height: 200px;
-    word-wrap: break-word; /* Permet de couper les mots longs */
-    white-space: pre-wrap; /* Permet de conserver les sauts de ligne */
-    border: 1px solid #ccc; /* Ajoute une bordure pour bien distinguer la zone */
-    padding: 10px; /* Ajoute un peu d’espace à l’intérieur */
-    background-color: #f9f9f9; /* Améliore la lisibilité avec un fond léger */
-}
-
-    </style> 
 </head>
 
 <body>
     <div class="container">
         <h1>Déchiffrement de Vigenère</h1>
 
-        <h2>Entrez le texte chiffrée :</h2>
+        <h2>Entrez le texte chiffré :</h2>
         <input type="text" id="info1" placeholder="Votre message ici...">
 
         <h2>Entrez la clé :</h2>
@@ -33,21 +21,45 @@
         <p id="result"></p>
     </div>
 
-    <script type="module">
-        import { vignereD } from './script.js';
+    <script>
+        function valeurNum(c) {
+            return c.charCodeAt(0) - 65;
+        }
+
+        function valeurAlpha(c) {
+            return String.fromCharCode(c + 65);
+        }
+
+        function vignereD(msg, cle) {
+            let result = "";
+            msg = msg.toUpperCase().replace(/[^A-Z]/g, ""); 
+            cle = cle.toUpperCase().replace(/[^A-Z]/g, ""); 
+
+            if (cle.length === 0) {
+                return "Erreur : la clé doit contenir au moins une lettre.";
+            }
+
+            for (let i = 0, j = 0; i < msg.length; i++) {
+                let n = valeurNum(msg[i]);
+                let k = valeurNum(cle[j % cle.length]);
+                let newCharCode = (n - k + 26) % 26;
+                result += valeurAlpha(newCharCode);
+                j++; 
+            }
+            return result;
+        }
 
         function afficherInfos() {
             let info1 = document.getElementById("info1").value;
             let info2 = document.getElementById("info2").value;
-        
+
             if (info1 && info2) {
-                let texteChiffre = vignereD(info1, info2);
-                document.getElementById("result").innerText = "Texte clair : " + texteChiffre;
+                let texteClair = vignereD(info1, info2);
+                document.getElementById("result").innerText = "Texte clair : " + texteClair;
             } else {
                 document.getElementById("result").innerText = "Veuillez remplir les deux champs.";
             }
         }
-        window.afficherInfos = afficherInfos; 
     </script>
 </body>
 </html>

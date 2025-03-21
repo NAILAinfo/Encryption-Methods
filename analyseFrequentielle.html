@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse Fréquentielle</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="Faviconn.png">
+</head>
+<body>
+    <div class="container">
+        <h2>Analyse Fréquentielle</h2>
+        <h3>Entrez le texte :</h3>
+        <input type="text" id="info1" placeholder="Votre message ici...">
+        <button onclick="afficherAnalyse()">Analyser</button>
+        <p id="message"></p>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function analyseFrequentielle(texte) {
+            texte = texte.toUpperCase().replace(/[^A-Z]/g, ""); // Garder uniquement les lettres A-Z
+            let freq = {};
+            let N = texte.length;
+
+            for (let char of texte) {
+                freq[char] = (freq[char] || 0) + 1;
+            }
+
+            let freqArray = Object.keys(freq).map(letter => ({
+                letter: letter,
+                frequency: (freq[letter] / N) * 100
+            })).sort((a, b) => b.frequency - a.frequency);
+
+            return freqArray;
+        }
+
+        function afficherAnalyse() {
+            let message = document.getElementById("info1").value.trim();
+
+            if (message === "") {
+                document.getElementById("message").textContent = "Veuillez entrer un texte.";
+                document.getElementById("result").innerHTML = "";
+                return;
+            }
+
+            let result = analyseFrequentielle(message);
+            let output = "<h3>Fréquence des lettres :</h3><ul>";
+            result.forEach(item => {
+                output += `<li>${item.letter} : ${item.frequency.toFixed(2)}%</li>`;
+            });
+            output += "</ul>";
+            
+            document.getElementById("message").textContent = "";
+            document.getElementById("result").innerHTML = output;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+import customtkinter as ctk
+from tkinter import messagebox
+from Crypto.Cipher import DES
+from Crypto.Util.Padding import pad, unpad
+import binascii
+import hashlib
+from DES import chiffrer as encrypt_des, dechiffrer as decrypt_des  # Import des fonctions DES existantes
+
+# CHIFFREMENT DESX
+def encrypt_desx(message, key, pre_whitening_key, post_whitening_key, iv=None):
+    # Préparation des clés
+    key = key.ljust(8, b'\0')[:8]
+    pre_w = hashlib.sha256(pre_whitening_key.encode()).digest()[:8]
+    post_w = hashlib.sha256(post_whitening_key.encode()).digest()[:8]
+    
+    # Préparation du message
+    message_bytes = message.encode()
+    padded_message = pad(message_bytes, DES.block_size)
+
+    # Pré-blanchiment
+    pre_whitened = bytes([p ^ w for p, w in zip(padded_message, pre_w * (len(padded_message) // 8 + 1))])
+
+    # Chiffrement DES
+    if iv is None:
+        iv = os.urandom(8)
+    cipher = DES.new(key, DES.MODE_CBC, iv)
+    encrypted = cipher.encrypt(pre_whitened)
+
+    # Post-blanchiment
+    post_whitened = bytes([c ^ w for c, w in zip(encrypted, post_w * (len(encrypted) // 8 + 1))])
+
+    return binascii.hexlify(iv).decode(), binascii.hexlify(post_whitened).decode()
+
+# DÉCHIFFREMENT DESX
+def decrypt_desx(encrypted_hex, key, iv_hex, pre_whitening_key, post_whitening_key):
+    # Préparation des clés
+    key = key.ljust(8, b'\0')[:8]
+    pre_w = hashlib.sha256(pre_whitening_key.encode()).digest()[:8]
+    post_w = hashlib.sha256(post_whitening_key.encode()).digest()[:8]
+    
+    # Préparation des données
+    iv = binascii.unhexlify(iv_hex)
+    encrypted = binascii.unhexlify(encrypted_hex)
+
+    # Post-déblanchiment
+    post_dewhitened = bytes([e ^ w for e, w in zip(encrypted, post_w * (len(encrypted) // 8 + 1))])
+
+    # Déchiffrement DES
+    cipher = DES.new(key, DES.MODE_CBC, iv)
+    decrypted = cipher.decrypt(post_dewhitened)
+
+    # Pré-déblanchiment
+    pre_dewhitened = bytes([d ^ w for d, w in zip(decrypted, pre_w * (len(decrypted) // 8 + 1))])
+
+    return unpad(pre_dewhitened, DES.block_size).decode()
+
+# ========================
+# INTERFACE GRAPHIQUE
+# ========================
+
+def chiffrer():
+    texte = texte_input.get("0.0", "end").strip()
+    cle = cle_input.get().strip()
+    mode = mode_var.get()
+    
+    if not texte or not cle:
+        messagebox.showerror("Erreur", "Le texte et la clé doivent être renseignés.")
+        return
+
+    try:
+        if mode == "DESX":
+            pre_w = pre_input.get().strip()
+            post_w = post_input.get().strip()
+            if not pre_w or not post_w:
+                messagebox.showerror("Erreur", "Les clés de blanchiment doivent être renseignées pour DESX.")
+                return
+            iv, result = encrypt_desx(texte, cle.encode(), pre_w, post_w)
+        else:
+            iv, result = encrypt_des(texte, cle.encode())
+            
+        resultat_output.delete("0.0", "end")
+        resultat_output.insert("0.0", f"Texte chiffré (hex) : {result}")
+        iv_output.delete("0.0", "end")
+        iv_output.insert("0.0", f"{iv}")
+        messagebox.showinfo("Information", f"IV à conserver pour le déchiffrement : {iv}")
+    except Exception as e:
+        messagebox.showerror("Erreur", f"Erreur lors du chiffrement : {str(e)}")
+
+def dechiffrer():
+    texte = texte_input.get("0.0", "end").strip()
+    cle = cle_input.get().strip()
+    iv = iv_input.get().strip()
+    mode = mode_var.get()
+    
+    if not texte or not cle or not iv:
+        messagebox.showerror("Erreur", "Le texte, la clé et l'IV doivent être renseignés.")
+        return
+
+    try:
+        if mode == "DESX":
+            pre_w = pre_input.get().strip()
+            post_w = post_input.get().strip()
+            if not pre_w or not post_w:
+                messagebox.showerror("Erreur", "Les clés de blanchiment doivent être renseignées pour DESX.")
+                return
+            decrypted = decrypt_desx(texte, cle.encode(), iv, pre_w, post_w)
+        else:
+            decrypted = decrypt_des(texte, cle.encode(), iv)
+            
+        resultat_output.delete("0.0", "end")
+        resultat_output.insert("0.0", f"Texte déchiffré : {decrypted}")
+    except Exception as e:
+        messagebox.showerror("Erreur", f"Erreur lors du déchiffrement : {str(e)}")
+
+# Configuration de l'interface
+ctk.set_appearance_mode("System")
+ctk.set_default_color_theme("blue")
+
+app = ctk.CTk()
+app.title("🔐 DES / DESX - Chiffrement / Déchiffrement")
+app.geometry("650x800")
+
+frame = ctk.CTkFrame(app, corner_radius=15)
+frame.pack(padx=20, pady=20, expand=True, fill="both")
+
+# Widgets de l'interface
+widgets = [
+    ("Mode de chiffrement :", "mode_var", "DES", ["DES", "DESX"]),
+    ("Texte ou texte chiffré (hex) :", "texte_input", "CTkTextbox", {"height": 100}),
+    ("Clé principale (8 caractères max) :", "cle_input", "CTkEntry", {"show": "*", "width": 300}),
+    ("Vecteur d'initialisation (IV) :", "iv_input", "CTkEntry", {"width": 300}),
+    ("Clé de pré-blanchiment (DESX uniquement) :", "pre_input", "CTkEntry", {"width": 300}),
+    ("Clé de post-blanchiment (DESX uniquement) :", "post_input", "CTkEntry", {"width": 300}),
+]
+
+for text, var_name, widget_type, kwargs in widgets:
+    if var_name.endswith("_var"):
+        var = ctk.StringVar(value=kwargs["value"])
+        setattr(sys.modules[__name__], var_name, var)
+        label = ctk.CTkLabel(frame, text=text, font=ctk.CTkFont(size=14))
+        label.pack(pady=(10, 0))
+        widget = getattr(ctk, f"CTkOptionMenu")(frame, variable=var, values=kwargs["values"])
+        widget.pack(pady=5)
+    else:
+        label = ctk.CTkLabel(frame, text=text, font=ctk.CTkFont(size=14))
+        label.pack(pady=(10, 0))
+        widget = getattr(ctk, widget_type)(frame, **kwargs)
+        widget.pack(pady=5)
+        setattr(sys.modules[__name__], var_name, widget)
+
+# Boutons
+btn_frame = ctk.CTkFrame(frame, fg_color="transparent")
+btn_frame.pack(pady=15)
+chiff_btn = ctk.CTkButton(btn_frame, text="🔒 Chiffrer", command=chiffrer)
+chiff_btn.pack(side="left", padx=10)
+dechiff_btn = ctk.CTkButton(btn_frame, text="🔓 Déchiffrer", command=dechiffrer)
+dechiff_btn.pack(side="left", padx=10)
+
+# Zones de résultat
+result_widgets = [
+    ("Résultat :", "resultat_output", {"height": 100}),
+    ("IV généré lors du chiffrement :", "iv_output", {"height": 40}),
+]
+
+for text, var_name, kwargs in result_widgets:
+    label = ctk.CTkLabel(frame, text=text, font=ctk.CTkFont(size=14))
+    label.pack(pady=(10, 0))
+    widget = ctk.CTkTextbox(frame, **kwargs)
+    widget.pack(padx=10, pady=10, fill="x")
+    setattr(sys.modules[__name__], var_name, widget)
+
+app.mainloop()

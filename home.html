@@ -1,47 +1,91 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cryptographie</title>
-    <link rel="stylesheet" href="style.css"> 
+  <meta charset="UTF-8">
+  <title>Encryption methodes</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      /* Image en arrière-plan */
+      background: url("Enc.png") no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      flex-direction: column; /* mettre les éléments en colonne */
+      justify-content: center; /* centre verticalement */
+      align-items: flex-start; /* contenu aligné à gauche */
+      text-align: left; /* texte aligné à gauche */
+      color: white;
+      font-family: Arial, sans-serif;
+      padding-left: 80px; /* petit espace depuis le bord gauche */
+    }
+
+    /* Animation pour les titres */
+    h1 {
+      font-size: 6em;
+      margin: 0;
+      opacity: 0;
+      transform: translateY(-30px);
+      animation: fadeInUp 1.5s ease forwards;
+    }
+
+    h1:nth-child(1) {
+      animation-delay: 0.3s;
+    }
+
+    h1:nth-child(2) {
+      animation-delay: 1s;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    p {
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* Icône GitHub */
+    .github-icon {
+      margin-top: 20px;
+      font-size: 2.5em;
+      color: white;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .github-icon:hover {
+      transform: scale(1.2);
+      color: #808080;
+    }
+  </style>
 </head>
 <body>
-    <nav>
-    <h1>Bienvenue dans l'outil de cryptographie</h1>
-    </nav>
-    <div class="wrapper">
-        <div class="container">
-            <h2>Chiffrement</h2>
-            <button onclick="window.location.href='atbash.html'">Atbash</button>
-            <button onclick="window.location.href='cesare.html'">César</button>
-            <button onclick="window.location.href='vignere.html'">Vigenère</button>
-            <button onclick="window.location.href='hill.html'">Hill</button>
-            <button onclick="window.location.href='affine.html'">Affine</button>
-            <button onclick="window.location.href='substitution_alt.html'">Substitution aleatoire</button>
-            <button onclick="window.location.href='OTP.html'">One Time Pad</button>
-            <button onclick="window.location.href='playfair.html'">Playfair</button>           
-            
-           
 
-        </div>
-        
-        <div class="container">
-            <h2>Déchiffrement</h2>
-            <button onclick="window.location.href='cesarD.html'">César</button>
-            <button onclick="window.location.href='vignereD.html'">Vigenère</button>
-            <button onclick="window.location.href='hillD.html'">Hill</button>
-            <button onclick="window.location.href='affineD.html'">Affine</button>
-            <button onclick="window.location.href='substitution_altD.html'">Substitution aleatoire</button>
-        </div>
-        
-        <div class="container">
-            <h2>Analyses Cryptographiques</h2>
-            <button onclick="window.location.href='analyseFrequentielle.html'">Analyse Fréquentielle</button>
-            <button onclick="window.location.href='kasiski.html'">Test de Kasiski</button>
-            <button onclick="window.location.href='coincidence.html'">Indice de Coïncidence</button>
-            <button onclick="window.location.href='motProbable.html'">Mot probable</button>
-        </div>
+    <h1>ENCRYPTION </h1>
+    <h1>METHODS</h1>
+
+    <p>“The way to be safe is to not believe you are safe ” </p>
+    <p>Thomas Fuller</p>
+
+    <!-- Icône GitHub -->
+    <a href="https://github.com/NAILAinfo/Encryption-Methods" target="_blank" class="github-icon">
+      <i class="fab fa-github"></i>
+    </a>
+
+    <!-- Ceci est un commentaire 
+    <div class="video-container">
+        <video autoplay loop muted>
+        <source src="gif.mp4" type="video/mp4">
+        Ton navigateur ne supporte pas la vidéo.
+        </video>
     </div>
+    -->
+
 </body>
 </html>

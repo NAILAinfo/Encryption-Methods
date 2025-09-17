@@ -1,6 +1,6 @@
 ## Cryptography Tree
 
-bash'''
+```bash
 Cryptography methods
 │
 ├── 1. Classical Cryptography

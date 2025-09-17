@@ -2,67 +2,102 @@
 
 ```bash
 Cryptography methods
+Cryptography
 │
 ├── 1. Classical Cryptography
 │   │
-│   ├── Substitution
-│   │   ├── Caesar Cipher
-│   │   ├── Atbash Cipher (alphabet reversal)
-│   │   ├── ROT13 (Caesar with shift 13)
-│   │   ├── Monoalphabetic Substitution
-│   │   └── Polybius Square (5x5 grid)
+│   ├── Substitution Ciphers
+│   │   ├── Monoalphabetic
+│   │   │   ├── Caesar Cipher
+│   │   │   ├── Atbash Cipher
+│   │   │   ├── ROT13
+│   │   │   ├── Affine Cipher
+│   │   │   ├── Random Substitution
+│   │   │   └── Polybius Square
+│   │   │
+│   │   └── Polyalphabetic
+│   │       ├── Vigenère Cipher
+│   │       ├── Beaufort Cipher
+│   │       ├── Autokey Cipher
+│   │       └── One-Time Pad (OTP)
 │   │
-│   ├── Transposition
-│   │   ├── Scytale (Spartan staff)
-│   │   ├── Columnar Transposition
-│   │   └── Rail Fence Cipher (zigzag writing)
+│   ├── Polygraphic / Block Substitution
+│   │   ├── Playfair Cipher (digraphs)
+│   │   └── Hill Cipher (matrix/block-based)
 │   │
-│   └── Polyalphabetic
-│       ├── Vigenère Cipher
-│       ├── Beaufort Cipher
-│       └── Autokey Cipher
+│   └── Transposition Ciphers
+│       ├── Scytale
+│       ├── Columnar Transposition
+│       └── Rail Fence
 │
 ├── 2. Modern Cryptography
 │   │
-│   ├── Symmetric Encryption
-│   │   ├── DES (Data Encryption Standard, outdated)
-│   │   ├── 3DES (Triple DES)
-│   │   ├── AES (128, 192, 256 bits)
-│   │   ├── Blowfish
-│   │   ├── Twofish
-│   │   └── ChaCha20
+│   ├── Symmetric Cryptography
+│   │   ├── Block Ciphers
+│   │   │   ├── DES (deprecated)
+│   │   │   ├── 3DES (legacy)
+│   │   │   ├── AES (128/192/256)
+│   │   │   ├── Blowfish
+│   │   │   └── Twofish
+│   │   │
+│   │   └── Stream Ciphers
+│   │       ├── RC4 (obsolete)
+│   │       ├── Salsa20
+│   │       └── ChaCha20
 │   │
-│   ├── Asymmetric Encryption
+│   ├── Asymmetric Cryptography (Public-Key)
 │   │   ├── RSA
-│   │   ├── ECC (Elliptic Curve Cryptography: ECDSA, Ed25519, Curve25519)
-│   │   ├── Diffie-Hellman (key exchange)
-│   │   └── ElGamal
+│   │   ├── Diffie–Hellman (key exchange protocol)
+│   │   ├── ElGamal
+│   │   └── ECC (Elliptic Curve Cryptography)
+│   │       ├── ECDSA (signatures)
+│   │       └── Ed25519 / Curve25519 (modern signatures)
 │   │
-│   ├── Hash Functions (irreversible)
-│   │   ├── MD5 (insecure, deprecated)
+│   ├── Digital Signatures
+│   │   ├── RSA Signature
+│   │   ├── DSA
+│   │   └── ECDSA / Ed25519
+│   │
+│   ├── Hash Functions & Key Derivation
+│   │   ├── MD5 (insecure)
 │   │   ├── SHA-1 (deprecated)
-│   │   ├── SHA-2 (SHA-224, SHA-256, SHA-512)
+│   │   ├── SHA-2 (SHA-256, SHA-512, …)
 │   │   ├── SHA-3 (Keccak)
 │   │   ├── Bcrypt
 │   │   ├── Scrypt
 │   │   └── Argon2 / PBKDF2
 │   │
-│   ├── Digital Signatures
-│   │   ├── RSA Signature
-│   │   ├── DSA (Digital Signature Algorithm)
-│   │   ├── ECDSA
-│   │   └── Ed25519
-│   │
-│   └── Hybrid Cryptography
-│       ├── TLS/SSL (HTTPS)
-│       ├── PGP (Pretty Good Privacy, secure email)
-│       ├── S/MIME (Secure/Multipurpose Internet Mail Extensions)
-│       └── IPSec (network security protocol)
+│   └── Hybrid Cryptography & Protocols
+│       ├── TLS / SSL
+│       ├── PGP / OpenPGP
+│       ├── S/MIME
+│       └── IPSec
 │
-└── 3. Related Domains
-    ├── Steganography (hiding information in media)
-    ├── Cryptanalysis (attacks and cipher-breaking)
-    ├── Zero-Knowledge Proofs
-    ├── Blockchain & Cryptocurrencies (e.g., Bitcoin → ECDSA, SHA-256)
-    └── Homomorphic Encryption (computing on encrypted data)
+├── 3. Cryptanalysis Techniques
+│   │
+│   ├── Classical / Statistical Attacks
+│   │   ├── Frequency Analysis
+│   │   ├── Kasiski Examination (for Vigenère)
+│   │   ├── Probable-word / Crib-dragging
+│   │   └── Index of Coincidence (Friedman Test)
+│   │
+│   ├── Modern Cryptanalysis
+│   │   ├── Brute-force / Exhaustive search
+│   │   ├── Meet-in-the-middle attack (2DES)
+│   │   ├── Differential cryptanalysis (block ciphers)
+│   │   ├── Linear cryptanalysis (block ciphers)
+│   │   ├── Birthday attack (hash collisions)
+│   │   └── Padding oracle attacks (CBC flaws)
+│   │
+│   └── Side-Channel & Implementation Attacks
+│       ├── Timing attacks
+│       ├── Power analysis (SPA/DPA)
+│       ├── Fault injection
+│       └── Replay attacks
+│
+└── 4. Related / Advanced Topics
+    ├── Steganography
+    ├── Blockchain & Cryptocurrencies
+    ├── Zero-Knowledge Proofs (ZKP)
+    └── Homomorphic Encryption
 ''''

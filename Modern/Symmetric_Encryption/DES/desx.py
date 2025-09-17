@@ -4,7 +4,7 @@ from Crypto.Cipher import DES
 from Crypto.Util.Padding import pad, unpad
 import binascii
 import hashlib
-from DES import chiffrer as encrypt_des, dechiffrer as decrypt_des  # Import des fonctions DES existantes
+from DES.DES2 import chiffrer as encrypt_des, dechiffrer as decrypt_des  # Import des fonctions DES existantes
 
 # CHIFFREMENT DESX
 def encrypt_desx(message, key, pre_whitening_key, post_whitening_key, iv=None):

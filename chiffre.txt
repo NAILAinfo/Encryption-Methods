@@ -1,4 +1,0 @@
----- Nouveau chiffrement ----
- nombre premier : 467, generateur :2, cl� public: 110, cle priv�: 183
- message chiffre :(302, 221)
-

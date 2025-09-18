@@ -2,8 +2,8 @@ body {
   margin-top: 90px;
   padding: 0;
   background: linear-gradient(500deg, #222e3b, #691d8f);
-   background-size: 400% 400%; /* plus grand donc plus de mouvement */
-  animation: gradientMove 4s ease infinite; /* plus rapide (6s) */
+   background-size: 500% 400%; /* plus grand donc plus de mouvement */
+  animation: gradientMove 6s ease infinite; /* plus rapide (6s) */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -101,6 +101,8 @@ h2 span {
   padding: 20px 60px 20px 60px;
   text-align: center;
   transition: transform 0.3s ease;
+  text-decoration: none; /* enlève le soulignement */
+
 }
 .crypto-card:hover {
   transform: scale(1.1);
@@ -130,4 +132,10 @@ h2 span {
   line-height: 1.4;
   margin-top: 0;
   font-style: normal;
+}
+/**------------------------------------------------*/
+.side3 {
+  width: 100%;
+  display: grid; 
+  place-items: center; 
 }

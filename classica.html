@@ -5,21 +5,44 @@
   <title>Classical Encryption</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body
-style="margin-top: 15px;">
-  <!-- SECTION CLASSICAL METHODS -->
+<body style="margin-top: 5px;">
   <div class="side3">
-    <h2><span>CLASSICAL ENCRYPTION</span> METHODS</h2>
-    <p>“History is written in ciphers as much as in ink.”</p>
-    <p id="tomas">— Adapted from Neal Stephenson</p>
+        <h2>Classical <span>Encryption</span> Methods</h2>
+        <section class="methods-section">
+                <div class="methods-container">
 
-  <div class="side2" style="max-width: 900px; text-align: center; line-height: 1.8;">
-    <p>
-      Classical encryption methods are some of the earliest techniques used to secure communication.
-      They rely on simple substitution and transposition rules to obscure messages.
-      Although they are no longer secure against modern attacks, these methods laid the foundation
-      for modern cryptography and remain important for educational purposes.
-    </p>
-  </div>
+                    <!-- Carte 1 -->
+                    <div class="method-card">
+                    <img src="img1.jpg" alt="Caesar Cipher">
+                    <h3>Caesar Cipher</h3>
+                    <p>
+                        One of the oldest and simplest encryption techniques. Each letter in the plaintext is shifted by a fixed number of positions.
+                    </p>
+                    <a href="caesar.html" class="btn">Learn More</a>
+                    </div>
+
+                    <!-- Carte 2 -->
+                    <div class="method-card">
+                    <img src="img2.jpg" alt="Vigenère Cipher">
+                    <h3>Vigenère Cipher</h3>
+                    <p>
+                        A polyalphabetic cipher that uses a keyword to determine the shift of each letter, making it harder to break than Caesar.
+                    </p>
+                    <a href="vigenere.html" class="btn">Learn More</a>
+                    </div>
+
+                    <!-- Carte 3 -->
+                    <div class="method-card">
+                    <img src="img3.jpg" alt="Playfair Cipher">
+                    <h3>Playfair Cipher</h3>
+                    <p>
+                        A digraph substitution cipher that encrypts pairs of letters, increasing complexity compared to simple substitution.
+                    </p>
+                    <a href="playfair.html" class="btn">Learn More</a>
+                    </div>
+
+                </div>
+        </section>
+    </div>
 </body>
 </html>

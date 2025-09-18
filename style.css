@@ -139,3 +139,74 @@ h2 span {
   display: grid; 
   place-items: center; 
 }
+.methods-section {
+  text-align: center;
+  margin: 60px auto;
+  max-width: 1200px;
+  color: white;
+}
+
+.methods-section h2 {
+  font-size: 3em;
+  margin-bottom: 40px;
+}
+
+.methods-section h2 span {
+  color: #bb35ff;
+}
+
+.methods-container {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.method-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  width: 320px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.method-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.method-card h3 {
+  margin: 20px 0 10px;
+  font-size: 1.6rem;
+  color: #bb35ff;
+}
+
+.method-card p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #ddd;
+  margin-bottom: 20px;
+}
+
+.method-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #bb35ff;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: #9c27e6;
+}

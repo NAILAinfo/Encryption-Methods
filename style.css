@@ -1,12 +1,26 @@
 body {
   margin-top: 90px;
   padding: 0;
-  background: linear-gradient(120deg, #141E30, #2380eb);
+  background: linear-gradient(500deg, #222e3b, #691d8f);
+   background-size: 400% 400%; /* plus grand donc plus de mouvement */
+  animation: gradientMove 4s ease infinite; /* plus rapide (6s) */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   color: white;
   font-family: Arial, sans-serif;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Animation titres */
